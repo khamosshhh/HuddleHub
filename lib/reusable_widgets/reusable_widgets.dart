@@ -39,8 +39,7 @@ import 'package:flutter/material.dart';
     );
   }
 
-  Container signInsignUpButton(
-      BuildContext context, bool isLogin, Function onTap) {
+  Container firebaseButton(BuildContext context, String title, Function onTap) {
     return Container(
       width: MediaQuery.of(context).size.width,
       height: 50,
@@ -51,7 +50,7 @@ import 'package:flutter/material.dart';
           onTap(); 
         }, 
         child: Text(
-          isLogin ? 'LOG IN' : 'SIGN UP', 
+          title, 
           style: const TextStyle(
             color: Colors.black87, fontWeight: FontWeight.bold, fontSize: 16),
         ),

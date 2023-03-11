@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:huddle_hub/screens/home.dart';
 import 'package:huddle_hub/screens/register.dart';
+import 'package:huddle_hub/screens/resetPassword.dart';
 import 'package:huddle_hub/utils/colors.dart';
 import 'package:huddle_hub/reusable_widgets/reusable_widgets.dart';
 
@@ -45,9 +46,10 @@ class _LoginScreenState extends State<LoginScreen> {
                 reusableTextField("Enter Password", Icons.lock_outline, true, 
                     _passwordTextController),
                 const SizedBox(
-                  height: 20,
+                  height: 5,
                 ),
-                signInsignUpButton(context, true, () {
+                forgetPassword(context),
+                firebaseButton(context, "LOG IN", () {
                   FirebaseAuth.instance
                     .signInWithEmailAndPassword(
                       email: _emailTextController.text, 
@@ -86,6 +88,23 @@ class _LoginScreenState extends State<LoginScreen> {
           ),
         )
       ],
+    );
+  }
+
+  Widget forgetPassword(BuildContext context) {
+    return Container(
+      width: MediaQuery.of(context).size.width,
+      height: 35,
+      alignment: Alignment.bottomRight,
+      child: TextButton(
+        child: const Text(
+          "Forgot Password?", 
+          style: TextStyle(color: Colors.white70), 
+          textAlign: TextAlign.right,
+        ),
+        onPressed: () => Navigator.push(
+          context, MaterialPageRoute(builder: (context) => ResetPassword())),
+      ),
     );
   }
 }

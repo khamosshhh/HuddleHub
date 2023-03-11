@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:huddle_hub/reusable_widgets/reusable_widgets.dart';
 import 'package:huddle_hub/screens/home.dart';
@@ -37,30 +38,39 @@ class _SignUpScreenState extends State<SignUpScreen> {
         ], begin: Alignment.topCenter, end: Alignment.bottomCenter)),
         child: SingleChildScrollView(
           child: Padding(
-            padding:EdgeInsets.fromLTRB(20, 120, 20, 0),
+            padding:const EdgeInsets.fromLTRB(20, 120, 20, 0),
             child: Column(
               children: <Widget>[
-                SizedBox(
+                const SizedBox(
                   height: 20,
                 ),
                 reusableTextField("Enter Username", Icons.person_outline, false, 
                     _usernameTextController),
-                SizedBox(
+                const SizedBox(
                   height: 20,
                 ),
                 reusableTextField("Enter Email ID", Icons.person_outline, false, 
                     _emailTextController),
-                SizedBox(
+                const SizedBox(
                   height: 20,
                 ),
                 reusableTextField("Enter Password", Icons.lock_outline, true, 
                     _passwordTextController),
-                SizedBox(
+                const SizedBox(
                   height: 20,
                 ),
                 signInsignUpButton(context, false, () {
-                  Navigator.push(context, 
-                    MaterialPageRoute(builder: (context) => HomeScreen()));
+                  FirebaseAuth.instance
+                  .createUserWithEmailAndPassword(
+                    email: _emailTextController.text, 
+                    password: _passwordTextController.text)
+                  .then((value) {
+                      print("Created New Account");
+                      Navigator.push(context, 
+                          MaterialPageRoute(builder: (context) => const HomeScreen()));
+                    }).onError((error, stackTrace) {
+                      print("Error ${error.toString()}");
+                    });
                 }),
               ]
             ),

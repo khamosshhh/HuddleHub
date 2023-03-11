@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "800937497346",
+    "project_id": "huddlehub-aa28b",
+    "storage_bucket": "huddlehub-aa28b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:800937497346:android:b7e21504115630f712681b",
+        "android_client_info": {
+          "package_name": "com.example.huddle_hub"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "800937497346-jl09i55lgloq9atn5p86khpj0fb842tp.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.huddle_hub",
+            "certificate_hash": "97f95dbf7692e9485d4c65c590e64a0f28368812"
+          }
+        },
+        {
+          "client_id": "800937497346-mod50r0ag1og07trukn3f8cmo58s4mdb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyByDBxXWSV6_5Xb0gXl2GPsbkNZ3Jnp-ag"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "800937497346-mod50r0ag1og07trukn3f8cmo58s4mdb.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

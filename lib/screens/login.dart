@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:huddle_hub/screens/home.dart';
 import 'package:huddle_hub/screens/register.dart';
@@ -33,22 +34,31 @@ class _LoginScreenState extends State<LoginScreen> {
             child: Column(
               children: <Widget>[
                 logoWidget("assets/images/logo.png"),
-                SizedBox(
+                const SizedBox(
                   height: 30,
                 ),
                 reusableTextField("Enter Username", Icons.person_outline, false, 
                     _emailTextController),
-                SizedBox(
+                const SizedBox(
                   height: 30,
                 ),
                 reusableTextField("Enter Password", Icons.lock_outline, true, 
                     _passwordTextController),
-                SizedBox(
+                const SizedBox(
                   height: 20,
                 ),
                 signInsignUpButton(context, true, () {
-                  Navigator.push(context, 
-                    MaterialPageRoute(builder: (context) => HomeScreen()));
+                  FirebaseAuth.instance
+                    .signInWithEmailAndPassword(
+                      email: _emailTextController.text, 
+                      password: _passwordTextController.text)
+                    .then((value) {
+                      print("Logged In");
+                      Navigator.push(context, 
+                          MaterialPageRoute(builder: (context) => const HomeScreen()));
+                  }).onError((error, stackTrace) {
+                    print("Error ${error.toString()}");
+                  });
                 }),
                 signUpOption()
               ]
@@ -68,7 +78,7 @@ class _LoginScreenState extends State<LoginScreen> {
         GestureDetector(
           onTap: () {
             Navigator.push(context, 
-                MaterialPageRoute(builder: (context) => SignUpScreen()));
+                MaterialPageRoute(builder: (context) => const SignUpScreen()));
           },
           child: const Text(
             " Sign Up",

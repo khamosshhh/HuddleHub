@@ -1,4 +1,4 @@
-# huddle_hub
+# Huddle Hub
 
 A new Flutter project.
 

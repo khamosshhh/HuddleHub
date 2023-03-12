@@ -1,22 +1,19 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:huddle_hub/screens/home.dart';
+import 'package:huddle_hub/screens/login.dart';
 import 'package:huddle_hub/screens/register.dart';
 import 'package:huddle_hub/screens/resetPassword.dart';
 import 'package:huddle_hub/utils/colors.dart';
 import 'package:huddle_hub/reusable_widgets/reusable_widgets.dart';
 
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
-  static String id = 'login';
+class WelcomeScreen extends StatefulWidget {
+  const WelcomeScreen({super.key});
+  static String id = 'welcome';
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  State<WelcomeScreen> createState() => _WelcomeState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
-  TextEditingController _passwordTextController = TextEditingController();
-  TextEditingController _emailTextController = TextEditingController();
+class _WelcomeState extends State<WelcomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -31,38 +28,38 @@ class _LoginScreenState extends State<LoginScreen> {
         ], begin: Alignment.topCenter, end: Alignment.bottomCenter)),
         child: SingleChildScrollView(
           child: Padding(
-            padding:const EdgeInsets.fromLTRB(20, 120, 20, 0),
+            padding:EdgeInsets.fromLTRB(
+              20, MediaQuery.of(context).size.height * 0.2, 20, 0),
             child: Column(
               children: <Widget>[
                 logoWidget("assets/images/logo.png"),
-                const SizedBox(
-                  height: 30,
+                const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 40, vertical: 16),
+                  child: Text(
+                    'Connect like never before!',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: 'Aware',
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
                 ),
-                reusableTextField(" Enter Username", Icons.person_outline, false, 
-                    _emailTextController),
                 const SizedBox(
-                  height: 30,
+                  height: 20,
                 ),
-                reusableTextField(" Enter Password", Icons.lock_outline, true, 
-                    _passwordTextController),
-                const SizedBox(
-                  height: 5,
-                ),
-                forgetPassword(context),
                 firebaseButton(context, "LOG IN", () {
-                  FirebaseAuth.instance
-                    .signInWithEmailAndPassword(
-                      email: _emailTextController.text, 
-                      password: _passwordTextController.text)
-                    .then((value) {
-                      print("Logged In");
-                      Navigator.push(context, 
-                          MaterialPageRoute(builder: (context) => const HomeScreen()));
-                  }).onError((error, stackTrace) {
-                    print("Error ${error.toString()}");
-                  });
+                    Navigator.push(context, 
+                        MaterialPageRoute(builder: (context) => const LoginScreen()));
                 }),
-                signUpOption()
+                const SizedBox(
+                  height: 10,
+                ),
+                firebaseButton(context, "SIGN UP", () {
+                    Navigator.push(context, 
+                        MaterialPageRoute(builder: (context) => const SignUpScreen()));
+                }),
               ]
             ),
           ),
@@ -103,7 +100,7 @@ class _LoginScreenState extends State<LoginScreen> {
           textAlign: TextAlign.right,
         ),
         onPressed: () => Navigator.push(
-          context, MaterialPageRoute(builder: (context) => ResetPassword())),
+          context, MaterialPageRoute(builder: (context) => const ResetPassword())),
       ),
     );
   }

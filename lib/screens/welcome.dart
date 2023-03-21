@@ -3,7 +3,7 @@ import 'package:huddle_hub/screens/login.dart';
 import 'package:huddle_hub/screens/register.dart';
 import 'package:huddle_hub/screens/resetPassword.dart';
 import 'package:huddle_hub/utils/colors.dart';
-import 'package:huddle_hub/reusable_widgets/reusable_widgets.dart';
+import 'package:huddle_hub/components/reusable_widgets.dart';
 
 class WelcomeScreen extends StatefulWidget {
   const WelcomeScreen({super.key});

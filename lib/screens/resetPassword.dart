@@ -25,35 +25,35 @@ class _ResetPasswordState extends State<ResetPassword> {
         ),
       ),
       body: Container(
-        width: MediaQuery.of(context).size.width,
-        height: MediaQuery.of(context).size.height,
-        decoration: BoxDecoration(
-          gradient: LinearGradient(colors: [ 
-            hexStringToColor("CB2B93"), 
-            hexStringToColor("9546C4"), 
+          width: MediaQuery.of(context).size.width,
+          height: MediaQuery.of(context).size.height,
+          decoration: BoxDecoration(
+              gradient: LinearGradient(colors: [
+            hexStringToColor("CB2B93"),
+            hexStringToColor("9546C4"),
             hexStringToColor("5E61F4")
-        ], begin: Alignment.topCenter, end: Alignment.bottomCenter)),
-        child: SingleChildScrollView(
-          child: Padding(
-            padding:const EdgeInsets.fromLTRB(20, 120, 20, 0),
+          ], begin: Alignment.topCenter, end: Alignment.bottomCenter)),
+          child: SingleChildScrollView(
+              child: Padding(
+            padding: const EdgeInsets.fromLTRB(20, 120, 20, 0),
             child: Column(
               children: <Widget>[
                 const SizedBox(
                   height: 20,
                 ),
-                reusableTextField("Enter Email ID", Icons.person_outline, false, 
+                reusableTextField("Enter Email ID", Icons.person_outline, false,
                     _emailTextController),
                 const SizedBox(
                   height: 20,
                 ),
                 firebaseButton(context, "Reset Password", () {
                   FirebaseAuth.instance
-                  .sendPasswordResetEmail(email: _emailTextController.text)
-                  .then((value) => Navigator.of(context).pop());
+                      .sendPasswordResetEmail(email: _emailTextController.text)
+                      .then((value) => Navigator.of(context).pop());
                 })
               ],
             ),
-        ))),
+          ))),
     );
   }
 }

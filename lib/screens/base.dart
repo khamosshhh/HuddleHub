@@ -57,11 +57,11 @@ class _BaseScreenState extends State<BaseScreen> {
         animationDuration: const Duration(milliseconds: 350),
         items: const <Widget>[
           Icon(
-            Icons.home,
+            Icons.home_outlined,
             color: Colors.black,
           ),
           Icon(
-            Icons.wifi_tethering,
+            Icons.wifi_tethering_outlined,
             color: Colors.black,
           ),
           Icon(
@@ -69,7 +69,7 @@ class _BaseScreenState extends State<BaseScreen> {
             color: Colors.black,
           ),
           Icon(
-            Icons.settings,
+            Icons.person_outline,
             color: Colors.black,
           ),
         ],

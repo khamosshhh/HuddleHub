@@ -9,7 +9,6 @@ Image logoWidget(String imageName) {
     fit: BoxFit.fitWidth,
     width: 250,
     height: 250,
-    color: Colors.white,
   );
 }
 
@@ -78,11 +77,15 @@ PreferredSizeWidget myAppBar() {
   return AppBar(
     automaticallyImplyLeading: false,
     backgroundColor: const Color(0xFFC0FFE8),
-    // leading: const IconButton(
-    //   icon: Icon(Icons.menu),
-    //   color: Colors.black,
-    //   onPressed: mySideBar,
-    // ),
+    leading: Builder(builder: (context) {
+      return IconButton(
+        icon: const Icon(Icons.menu),
+        color: Colors.black,
+        onPressed: () {
+          Scaffold.of(context).openDrawer();
+        },
+      );
+    }),
     centerTitle: true,
     title: const Text(
       'HUDDLE HUB',
@@ -100,7 +103,7 @@ PreferredSizeWidget myAppBar() {
 //   return Drawer(
 //     child: ListView(
 //       padding: const EdgeInsets.all(0),
-//       children: [
+//       children: <Widget>[
 //         DrawerHeader(
 //           decoration: const BoxDecoration(
 //             color: Colors.indigo,
@@ -130,7 +133,7 @@ PreferredSizeWidget myAppBar() {
 //               ), //Text
 //             ), //circleAvatar
 //           ), //UserAccountDrawerHeader
-//         ), //DrawerHeader
+//         ),
 //         ListTile(
 //           leading: const Icon(Icons.person),
 //           title: const Text(' My Profile '),
@@ -172,7 +175,7 @@ PreferredSizeWidget myAppBar() {
 //           onTap: () {
 //             FirebaseAuth.instance.signOut().then((value) {
 //               print("Logged Out");
-//               Navigator.push(
+//               Navigator.pushReplacement(
 //                   context,
 //                   MaterialPageRoute(
 //                       builder: (context) => const WelcomeScreen()));

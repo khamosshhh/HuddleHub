@@ -3,12 +3,9 @@ import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:huddle_hub/screens/hobbies.dart';
 import 'package:huddle_hub/screens/base.dart';
 import 'package:huddle_hub/screens/login.dart';
 import 'package:huddle_hub/screens/register.dart';
-import 'package:huddle_hub/screens/search.dart';
-import 'package:huddle_hub/screens/settings.dart';
 import 'package:huddle_hub/screens/welcome.dart';
 
 void main() async {
@@ -47,9 +44,15 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      title: 'HUDDLE HUB',
+      // theme: ThemeData(
+      //   fontFamily: 'Aware',
+      // ),
+
       /// check if user is signed (Open Home Page ) if user is not signed in (Open Welcome Page)
-      initialRoute:
-          FirebaseAuth.instance.currentUser == null ? WelcomeScreen.id : BaseScreen.id,
+      initialRoute: FirebaseAuth.instance.currentUser == null
+          ? WelcomeScreen.id
+          : BaseScreen.id,
 
       ///key value pair
       routes: {
@@ -58,6 +61,7 @@ class _MyAppState extends State<MyApp> {
         SignUpScreen.id: (context) => const SignUpScreen(),
         BaseScreen.id: (context) => const BaseScreen(),
       },
+
       home: const WelcomeScreen(),
     );
   }

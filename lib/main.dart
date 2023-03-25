@@ -45,9 +45,9 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'HUDDLE HUB',
-      // theme: ThemeData(
-      //   fontFamily: 'Aware',
-      // ),
+      theme: ThemeData(
+        backgroundColor: Colors.grey[300],
+      ),
 
       /// check if user is signed (Open Home Page ) if user is not signed in (Open Welcome Page)
       initialRoute: FirebaseAuth.instance.currentUser == null

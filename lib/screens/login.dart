@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:huddle_hub/screens/base.dart';
 import 'package:huddle_hub/screens/register.dart';
 import 'package:huddle_hub/screens/resetPassword.dart';
@@ -50,7 +51,6 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[300],
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
@@ -61,11 +61,10 @@ class _LoginScreenState extends State<LoginScreen> {
                 const SizedBox(height: 15),
 
                 // Heading
-                const Text(
+                Text(
                   'Hello Again!',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 24,
+                  style: GoogleFonts.bebasNeue(
+                    fontSize: 52,
                   ),
                 ),
                 const SizedBox(height: 10),
@@ -94,6 +93,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         border: InputBorder.none,
                         hintText: 'Email Address',
                       ),
+                      textInputAction: TextInputAction.next,
                     ),
                   ),
                 ),
@@ -204,63 +204,9 @@ class _LoginScreenState extends State<LoginScreen> {
                   ],
                 ),
               ],
-
-              // child: Padding(
-              //   padding: const EdgeInsets.fromLTRB(20, 120, 20, 0),
-              //   child: Column(children: <Widget>[
-              //     logoWidget("assets/images/logo.png"),
-              //     const SizedBox(
-              //       height: 30,
-              //     ),
-              //     reusableTextField(" Enter Username", Icons.person_outline, false,
-              //         _emailTextController),
-              //     const SizedBox(
-              //       height: 30,
-              //     ),
-              //     reusableTextField(" Enter Password", Icons.lock_outline, true,
-              //         _passwordTextController),
-              //     const SizedBox(
-              //       height: 5,
-              //     ),
-              //     forgetPassword(context),
-              //     firebaseButton(context, "LOG IN", () {
-              //       FirebaseAuth.instance
-              //           .signInWithEmailAndPassword(
-              //               email: _emailTextController.text,
-              //               password: _passwordTextController.text)
-              //           .then((value) {
-              //         print("Logged In");
-              //         Navigator.pushReplacement(
-              //             context,
-              //             MaterialPageRoute(
-              //                 builder: (context) => const BaseScreen()));
-              //       }).onError((error, stackTrace) {
-              //         print("Error ${error.toString()}");
-              //       });
-              //     }),
-              //     signUpOption()
-              //   ]),
-              // ),
             ),
           ),
         ),
-      ),
-    );
-  }
-
-  Widget forgetPassword(BuildContext context) {
-    return Container(
-      width: MediaQuery.of(context).size.width,
-      height: 35,
-      alignment: Alignment.bottomRight,
-      child: TextButton(
-        child: const Text(
-          "Forgot Password?",
-          style: TextStyle(color: Colors.white70),
-          textAlign: TextAlign.right,
-        ),
-        onPressed: () => Navigator.push(context,
-            MaterialPageRoute(builder: (context) => const ResetPassword())),
       ),
     );
   }

@@ -5,8 +5,7 @@ html {
 body {
   margin: 0;
   min-height: 100%;
-  background-color: #ffffff;
-  background-image: url("img/light-background.png");
+  background-color: #E0E0E0;
   background-size: 100% 100%;
 }
 

@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:huddle_hub/components/reusable_widgets.dart';
+
+import '../utils/widgets/reusable_widgets.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});

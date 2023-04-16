@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:huddle_hub/components/reusable_widgets.dart';
+
+import '../utils/widgets/reusable_widgets.dart';
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({super.key});
@@ -13,7 +14,7 @@ class _SearchScreenState extends State<SearchScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: myAppBar(),
-      
+
       body: const Center(
         child: Text('NOT IMPLEMENTED YET'),
       ),
@@ -34,7 +35,7 @@ class _SearchScreenState extends State<SearchScreen> {
       //       // icon: const Icon(Icons.wifi_tethering),
       //       color: Colors.black,
       //       // onPressed: () {
-      //       //   Navigator.push(context, 
+      //       //   Navigator.push(context,
       //       //       MaterialPageRoute(builder: (context) => const SearchScreen()));
       //       // }
       //     ),
@@ -43,7 +44,7 @@ class _SearchScreenState extends State<SearchScreen> {
       //       // icon: const Icon(Icons.favorite_border),
       //       color: Colors.black,
       //       // onPressed: () {
-      //       //   Navigator.push(context, 
+      //       //   Navigator.push(context,
       //       //       MaterialPageRoute(builder: (context) => const HobbiesScreen()));
       //       // }
       //     ),
@@ -52,13 +53,12 @@ class _SearchScreenState extends State<SearchScreen> {
       //       // icon: const Icon(Icons.settings),
       //       color: Colors.black,
       //       // onPressed: () {
-      //       //   Navigator.push(context, 
+      //       //   Navigator.push(context,
       //       //       MaterialPageRoute(builder: (context) => const SettingsScreen()));
       //       // }
       //     ),
       //   ],
       // ),
-    
     );
   }
 }

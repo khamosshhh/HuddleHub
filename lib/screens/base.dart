@@ -1,9 +1,10 @@
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:huddle_hub/screens/hobbies.dart';
-import 'package:huddle_hub/screens/home.dart';
-import 'package:huddle_hub/screens/search.dart';
-import 'package:huddle_hub/screens/settings.dart';
+
+import '../radar.dart';
+import 'hobbies.dart';
+import 'home.dart';
+import 'profile/profile.dart';
 
 class BaseScreen extends StatefulWidget {
   const BaseScreen({super.key});
@@ -19,9 +20,9 @@ class _BaseScreenState extends State<BaseScreen> {
 
   final screens = const [
     HomeScreen(),
-    SearchScreen(),
+    RadarSearch(),
     HobbiesScreen(),
-    SettingsScreen(),
+    ProfileScreen(),
   ];
 
   @override
@@ -53,7 +54,6 @@ class _BaseScreenState extends State<BaseScreen> {
         index: index,
         height: 60,
         backgroundColor: Colors.transparent,
-        color: const Color.fromARGB(255, 221, 255, 242),
         animationDuration: const Duration(milliseconds: 350),
         items: const <Widget>[
           Icon(
@@ -61,11 +61,11 @@ class _BaseScreenState extends State<BaseScreen> {
             color: Colors.black,
           ),
           Icon(
-            Icons.wifi_tethering_outlined,
+            Icons.search_outlined,
             color: Colors.black,
           ),
           Icon(
-            Icons.favorite_border,
+            Icons.hub_outlined,
             color: Colors.black,
           ),
           Icon(

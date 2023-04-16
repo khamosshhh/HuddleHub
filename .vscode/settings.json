@@ -1,3 +1,7 @@
 {
-    "java.configuration.updateBuildConfiguration": "interactive"
+    "java.configuration.updateBuildConfiguration": "interactive",
+    "vscord.app.privacyMode.enable": true,
+    "vscord.status.idle.check": true,
+    "vscord.status.idle.enabled": true,
+    "vscord.status.idle.timeout": 15000
 }

@@ -65,12 +65,6 @@ class _MarkersDisplayState extends State<MarkersDisplay>
       });
   }
 
-  @override
-  void dispose() {
-    _animationController?.dispose();
-    super.dispose();
-  }
-
   // Fetch Live Location of the User
   Future<Position> _updateMyLocation() async {
     // Request permission to access the device's location
@@ -106,6 +100,12 @@ class _MarkersDisplayState extends State<MarkersDisplay>
     }
 
     return location;
+  }
+
+  @override
+  void dispose() {
+    _animationController?.dispose();
+    super.dispose();
   }
 
   _getMarkers() {

@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
-import 'package:huddle_hub/screens/radar/radar_display.dart';
-import 'package:huddle_hub/utils/constants/validators.dart';
+
+import '../utils/models/navbar_model.dart';
+import '../utils/widgets/reusable_widgets.dart';
+import 'radar/marker.dart';
+import 'radar/radar_display.dart';
+
+double range = 100;
 
 class RadarSearch extends StatefulWidget {
+  static String routeName = "/radar";
   const RadarSearch({super.key});
 
   @override
@@ -16,7 +21,6 @@ class _RadarSearchState extends State<RadarSearch> {
   String? location;
   List<String> interests = [];
   List<String> genders = [];
-  double range = 1000;
   bool isInterestDropdownOpen = false;
   bool isGenderDropdownOpen = false;
 
@@ -54,9 +58,7 @@ class _RadarSearchState extends State<RadarSearch> {
     final formKey = GlobalKey<FormState>();
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Radar Search'),
-      ),
+      appBar: myAppBar(),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Form(
@@ -81,7 +83,7 @@ class _RadarSearchState extends State<RadarSearch> {
                     ),
                     decoration: const InputDecoration(
                       border: OutlineInputBorder(),
-                      hintText: 'Select your interests',
+                      hintText: 'Select your interests (Optional)',
                       contentPadding: EdgeInsets.symmetric(
                         horizontal: 16.0,
                         vertical: 12.0,
@@ -134,7 +136,7 @@ class _RadarSearchState extends State<RadarSearch> {
                     ),
                     decoration: const InputDecoration(
                       border: OutlineInputBorder(),
-                      hintText: 'Select preferred gender',
+                      hintText: 'Select preferred gender (Optional)',
                       contentPadding: EdgeInsets.symmetric(
                         horizontal: 16.0,
                         vertical: 12.0,
@@ -172,15 +174,16 @@ class _RadarSearchState extends State<RadarSearch> {
 
               // Distance Filter
               const SizedBox(height: 16.0),
-              const Text('Range'),
+              Text('Range: ' '${range.toInt()} m'),
               Slider(
                 value: range,
-                min: 0,
+                min: 100,
                 max: 1000,
-                divisions: 10,
+                divisions: 9,
                 onChanged: (value) {
                   setState(() {
                     range = value;
+                    Range(range: value.toInt());
                   });
                 },
                 label: '${range.toInt()} m',
@@ -199,6 +202,7 @@ class _RadarSearchState extends State<RadarSearch> {
           ),
         ),
       ),
+      bottomNavigationBar: myNavBar(MenuState.radar),
     );
   }
 }

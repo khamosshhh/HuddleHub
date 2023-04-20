@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
-import 'package:huddle_hub/screens/profile/allUsers.dart';
-import 'package:huddle_hub/utils/widgets/reusable_widgets.dart';
 import 'package:smooth_compass/utils/src/compass_ui.dart';
 
-import '../../utils/constants/sizes.dart';
+import '../profile/allUsers.dart';
+import '../radar.dart';
 import 'direction_arc.dart';
 import 'markers_display.dart';
 
@@ -22,6 +20,22 @@ class _RadarDisplayState extends State<RadarDisplay> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      // appBar: AppBar(
+      //   backgroundColor: const Color.fromARGB(255, 26, 34, 37),
+      //   elevation: 0,
+      //   leading: IconButton(
+      //     icon: const Icon(Icons.navigate_before_rounded),
+      //     onPressed: () {
+      //       Get.off(
+      //         () => const RadarSearch(),
+      //         transition: Transition.leftToRight,
+      //         duration: const Duration(milliseconds: 500),
+      //       );
+      //     },
+      //   ),
+      //   toolbarHeight: 45,
+      // ),
+
       body: SmoothCompass(
         compassBuilder: (context, compassData, compassAsset) {
           final double animationTurns =
@@ -98,9 +112,9 @@ class _RadarDisplayState extends State<RadarDisplay> {
                           turns: animationTurns,
                           duration:
                               Duration(milliseconds: _animationDurationMs),
-                          child: const MarkersDisplay(
+                          child: MarkersDisplay(
                             size: size,
-                            zoomLevel: 5.0,
+                            zoomLevel: range/10000,
                           ),
                         ),
                       ],
@@ -136,6 +150,7 @@ class _RadarDisplayState extends State<RadarDisplay> {
                   ),
                 ),
 
+                // User Details Button
                 Column(
                   children: [
                     const SizedBox(

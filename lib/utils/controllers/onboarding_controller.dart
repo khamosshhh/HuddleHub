@@ -19,7 +19,6 @@ class OnboardingController extends GetxController {
         title: onboardingTitle1,
         subTitle: onboardingSubTitle1,
         counter: onboardingCounter1,
-        bgColor: onboardingPage1Color,
       ),
     ),
     OnboardingPageWidget(
@@ -28,7 +27,6 @@ class OnboardingController extends GetxController {
         title: onboardingTitle2,
         subTitle: onboardingSubTitle2,
         counter: onboardingCounter2,
-        bgColor: onboardingPage2Color,
       ),
     ),
     OnboardingPageWidget(
@@ -37,7 +35,6 @@ class OnboardingController extends GetxController {
         title: onboardingTitle3,
         subTitle: onboardingSubTitle3,
         counter: onboardingCounter3,
-        bgColor: onboardingPage3Color,
       ),
     ),
   ];

@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 
+import '../utils/models/navbar_model.dart';
 import '../utils/widgets/reusable_widgets.dart';
 
 class HobbiesScreen extends StatefulWidget {
+  static String routeName = "/hobbies";
   const HobbiesScreen({super.key});
 
   @override
@@ -19,6 +21,7 @@ class _HobbiesScreenState extends State<HobbiesScreen> {
         child: Text('NOT IMPLEMENTED YET'),
       ),
 
+      bottomNavigationBar: myNavBar(MenuState.hobbies)
       // bottomNavigationBar: CurvedNavigationBar(
       //   index: 2,
       //   height: 60,

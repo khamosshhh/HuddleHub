@@ -1,4 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:line_awesome_flutter/line_awesome_flutter.dart';
+
+import '../constants/colors.dart';
+import '../models/navbar_model.dart';
+import '../../screens/hobbies.dart';
+import '../../screens/home.dart';
+import '../../screens/profile/profile.dart';
+import '../../screens/radar.dart';
 
 Image logoWidget(String imageName) {
   return Image.asset(
@@ -48,8 +57,7 @@ ElevatedButton myButton(BuildContext context, String title, Function onTap) {
         title,
         style: const TextStyle(
           fontWeight: FontWeight.bold,
-          fontSize: 17,
-          fontFamily: 'Aware',
+          fontSize: 16,
         ),
       ),
     ),
@@ -92,16 +100,19 @@ PreferredSizeWidget myAppBar() {
   return AppBar(
     automaticallyImplyLeading: false,
     backgroundColor: const Color(0xFFC0FFE8),
-    leading: Builder(builder: (context) {
-      return IconButton(
-        icon: const Icon(Icons.menu),
-        color: Colors.black,
-        onPressed: () {
-          Scaffold.of(context).openDrawer();
-        },
-      );
-    }),
+
+    // leading: Builder(builder: (context) {
+    //   return IconButton(
+    //     icon: const Icon(Icons.menu),
+    //     color: Colors.black,
+    //     onPressed: () {
+    //       Scaffold.of(context).openDrawer();
+    //     },
+    //   );
+    // }),
+
     centerTitle: true,
+    toolbarHeight: 45,
     title: const Text(
       'HUDDLE HUB',
       style: TextStyle(
@@ -111,6 +122,75 @@ PreferredSizeWidget myAppBar() {
         fontFamily: 'Aware',
       ),
     ),
+  );
+}
+
+Widget myNavBar(MenuState selectedMenu) {
+  return Container(
+    decoration: BoxDecoration(
+      color: const Color(0xFFC0FFE8),
+      boxShadow: [
+        BoxShadow(
+          offset: const Offset(0, -15),
+          blurRadius: 20,
+          color: const Color(0xFFDADADA).withOpacity(0.15),
+        ),
+      ],
+    ),
+    child: SafeArea(
+        top: false,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            // Home Screen
+            IconButton(
+              icon: Icon(
+                MenuState.home == selectedMenu
+                    ? Icons.home_rounded
+                    : Icons.home_outlined,
+              ),
+              onPressed: () {
+                Get.to(() => const HomeScreen());
+              },
+            ),
+
+            // Radar Screen
+            IconButton(
+              icon: Icon(
+                MenuState.radar == selectedMenu
+                    ? Icons.wifi_find_rounded
+                    : Icons.wifi_find_outlined,
+              ),
+              onPressed: () {
+                Get.to(() => const RadarSearch());
+              },
+            ),
+
+            // Hobbies Screen
+            IconButton(
+              icon: Icon(
+                MenuState.hobbies == selectedMenu
+                    ? Icons.favorite_rounded
+                    : Icons.favorite_border_outlined,
+              ),
+              onPressed: () {
+                Get.to(() => const HobbiesScreen());
+              },
+            ),
+
+            // Profile Screen
+            IconButton(
+              icon: Icon(
+                MenuState.profile == selectedMenu
+                    ? Icons.account_circle_rounded
+                    : Icons.account_circle_outlined,
+              ),
+              onPressed: () {
+                Get.to(() => const ProfileScreen());
+              },
+            ),
+          ],
+        )),
   );
 }
 

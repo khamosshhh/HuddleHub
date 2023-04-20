@@ -16,7 +16,6 @@ class OnboardingPageWidget extends StatelessWidget {
     final size = MediaQuery.of(context).size;
     return Container(
       padding: const EdgeInsets.all(defaultSize),
-      color: model.bgColor,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [

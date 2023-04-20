@@ -8,6 +8,7 @@ import '../../utils/constants/text_strings.dart';
 import '../../utils/controllers/splash_controller.dart';
 
 class SplashScreen extends StatelessWidget {
+  static String routeName = "/splash";
   SplashScreen({Key? key}) : super(key: key);
   static String id = 'splash';
 

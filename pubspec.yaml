@@ -38,9 +38,6 @@ dependencies:
   firebase_core: ^2.7.1
   firebase_auth: ^4.2.10
   cloud_firestore: ^4.4.5
-  bloc: ^8.1.1
-  flutter_bloc: ^8.1.2
-  curved_navigation_bar: ^1.0.3
   flutter_native_splash: ^2.2.18
   google_fonts: ^4.0.3
   intl: ^0.17.0
@@ -53,6 +50,16 @@ dependencies:
   geocoding: ^2.1.0
   form_field_validator: ^1.1.0
   smooth_compass: ^2.0.17
+  flutter_svg: ^1.1.6
+  image_picker: ^0.8.7+3
+  path_provider: ^2.0.14
+  path: ^1.8.2
+  firebase_storage: ^11.1.0
+  url_launcher: ^6.1.10
+  font_awesome_flutter: ^10.4.0
+  card_swiper: ^2.0.4
+  flip_card: ^0.7.0
+  flutter_staggered_grid_view: ^0.4.0
 
 dev_dependencies:
   flutter_test:
@@ -79,6 +86,7 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/images/
+    - assets/icons/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
@@ -95,6 +103,20 @@ flutter:
     - family: Aware
       fonts:
         - asset: assets/fonts/AwareBold-qZo3x.ttf
+    - family: Muli
+      fonts:
+        - asset: assets/fonts/muli/Muli.ttf
+        - asset: assets/fonts/muli/Muli-Bold.ttf
+          weight: 700
+        - asset: assets/fonts/muli/Muli-Light.ttf
+          weight: 300
+    - family: OpenSans
+      fonts:
+        - asset: assets/fonts/opensans/OpenSans-Regular.ttf
+
+    - family: Playlist
+      fonts:
+        - asset: assets/fonts/playlist/PlaylistScript.ttf
           # style: italic
   #   - family: Trajan Pro
   #     fonts:

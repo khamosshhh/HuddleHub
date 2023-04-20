@@ -1,13 +1,23 @@
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:line_awesome_flutter/line_awesome_flutter.dart';
+import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:line_awesome_flutter/line_awesome_flutter.dart';
+import 'package:path/path.dart';
+import 'package:path_provider/path_provider.dart';
+
+import '../../utils/constants/colors.dart';
 import '../../utils/constants/sizes.dart';
 import '../../utils/constants/text_strings.dart';
 import '../../utils/controllers/profile_controller.dart';
 import '../../utils/models/user_model.dart';
 import '../../utils/widgets/reusable_widgets.dart';
+import 'pfp.dart';
 import 'profile.dart';
 import '../initial/welcome.dart';
 
@@ -19,9 +29,47 @@ class UpdateProfileScreen extends StatefulWidget {
 }
 
 class _UpdateProfileScreen extends State<UpdateProfileScreen> {
+  File? image;
+  String imageUrl = ' ';
+  var imageLink;
+
+  Future pickImage(ImageSource source) async {
+    try {
+      final image = await ImagePicker().pickImage(source: source);
+
+      //final imageTemp = File(image.path);
+      final imagePath = await saveImagePermanently(image!.path);
+      setState(() => this.image = imagePath);
+    } on PlatformException catch (e) {
+      print('Failed to pick image: $e');
+    }
+  }
+
+  Future<File> saveImagePermanently(String imagePath) async {
+    final directory = await getApplicationDocumentsDirectory();
+    final name = basename(imagePath);
+    final image = File('${directory.path}/$name');
+
+    Reference ref = FirebaseStorage.instance.ref().child(name);
+    await ref.putFile(File(image.path));
+    ref.getDownloadURL().then((value) {
+      print(value);
+      setState(() {
+        imageUrl = value;
+        imageLink = PfPDB(imageUrl: value);
+
+        FirebaseAuth.instance.currentUser!.updatePhotoURL(imageUrl);
+        storeImageUrl(imageLink);
+      });
+    });
+
+    return File(imagePath).copy(image.path);
+  }
+
   @override
   Widget build(BuildContext context) {
     final controller = Get.put(ProfileController());
+    String? urL = FirebaseAuth.instance.currentUser!.photoURL;
 
     return Scaffold(
       appBar: AppBar(
@@ -40,7 +88,6 @@ class _UpdateProfileScreen extends State<UpdateProfileScreen> {
           ),
         ),
       ),
-
       body: SingleChildScrollView(
         child: Container(
           padding: const EdgeInsets.all(defaultSize),
@@ -57,30 +104,32 @@ class _UpdateProfileScreen extends State<UpdateProfileScreen> {
                       // Profile Photo
                       Stack(
                         children: [
-                          Container(
-                            height: 120,
-                            width: 120,
-                            decoration: BoxDecoration(
-                              border: Border.all(
-                                  width: 2, color: const Color(0xFF000014)),
-                              borderRadius: BorderRadius.circular(100),
-                            ),
-                            child: const Image(
-                                image: AssetImage('assets/images/logo.png'),
-                                fit: BoxFit.cover),
+                          CircleAvatar(
+                            backgroundImage: imageUrl == ' '
+                                ? const AssetImage('assets/images/Huddle.png')
+                                : NetworkImage(urL!) as ImageProvider,
+                            radius:
+                                MediaQuery.of(context).size.aspectRatio * 100,
+                            foregroundColor: primaryColor,
                           ),
                           Positioned(
-                            bottom: 0,
+                            top: 30,
                             right: 0,
                             child: Container(
-                              width: 35,
-                              height: 35,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(100),
-                                color: const Color(0xFF000014),
+                              width: MediaQuery.of(context).size.width * 0.1,
+                              height: MediaQuery.of(context).size.height * 0.2,
+                              decoration: const BoxDecoration(
+                                color: Color(0xFF000014),
+                                shape: BoxShape.circle,
                               ),
-                              child: const Icon(LineAwesomeIcons.camera,
-                                  size: 20, color: Colors.white),
+                              child: IconButton(
+                                icon: const Icon(
+                                  LineAwesomeIcons.alternate_pencil,
+                                  size: 20,
+                                ),
+                                color: Colors.white,
+                                onPressed: () => myPfPDialog(context),
+                              ),
                             ),
                           )
                         ],
@@ -215,46 +264,69 @@ class _UpdateProfileScreen extends State<UpdateProfileScreen> {
           ),
         ),
       ),
-      // bottomNavigationBar: CurvedNavigationBar(
-      //   index: 2,
-      //   height: 60,
-      //   backgroundColor: Colors.transparent,
-      //   color: const Color.fromARGB(255, 221, 255, 242),
-      //   animationDuration: const Duration(milliseconds: 350),
-      //   items: const <Widget>[
-      //     Icon(
-      //       Icons.home,
-      //       color: Colors.black,
-      //     ),
-      //     Icon(
-      //       Icons.wifi_tethering,
-      //       // icon: const Icon(Icons.wifi_tethering),
-      //       color: Colors.black,
-      //       // onPressed: () {
-      //       //   Navigator.push(context,
-      //       //       MaterialPageRoute(builder: (context) => const SearchScreen()));
-      //       // }
-      //     ),
-      //     Icon(
-      //       Icons.favorite_border,
-      //       // icon: const Icon(Icons.favorite_border),
-      //       color: Colors.black,
-      //       // onPressed: () {
-      //       //   Navigator.push(context,
-      //       //       MaterialPageRoute(builder: (context) => const UpdateProfileScreen()));
-      //       // }
-      //     ),
-      //     Icon(
-      //       Icons.settings,
-      //       // icon: const Icon(Icons.settings),
-      //       color: Colors.black,
-      //       // onPressed: () {
-      //       //   Navigator.push(context,
-      //       //       MaterialPageRoute(builder: (context) => const SettingsScreen()));
-      //       // }
-      //     ),
-      //   ],
-      // ),
+    );
+  }
+
+// Image Selection
+  Future myPfPDialog(context) {
+    return showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text(
+          'Select Image Source',
+          textAlign: TextAlign.center,
+        ),
+        titlePadding: const EdgeInsets.all(15),
+        actions: [
+          // Camera Option
+          TextButton(
+            onPressed: () =>
+                Navigator.pop(context, pickImage(ImageSource.camera)),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: const [
+                Icon(
+                  LineAwesomeIcons.camera,
+                  color: primaryColor,
+                  size: 30,
+                ),
+                SizedBox(width: 10),
+                Text(
+                  'Camera',
+                  style: TextStyle(
+                    color: primaryColor,
+                    fontSize: 18,
+                  ),
+                ),
+              ],
+            ),
+          ),
+
+          // Gallery Option
+          TextButton(
+            onPressed: () =>
+                Navigator.pop(context, pickImage(ImageSource.gallery)),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: const [
+                Icon(
+                  LineAwesomeIcons.image,
+                  color: primaryColor,
+                  size: 30,
+                ),
+                SizedBox(width: 10),
+                Text(
+                  'Gallery',
+                  style: TextStyle(
+                    color: primaryColor,
+                    fontSize: 18,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

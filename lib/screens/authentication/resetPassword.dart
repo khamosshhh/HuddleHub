@@ -53,6 +53,7 @@ class ResetPasswordScreen {
 }
 
 class ResetPassWord extends StatelessWidget {
+  static String routeName = "/forgot_password";
   const ResetPassWord({
     Key? key,
     required this.btnIcon,

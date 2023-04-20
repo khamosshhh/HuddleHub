@@ -1,26 +1,71 @@
+import 'dart:io';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:huddle_hub/screens/profile/pfp.dart';
+import 'package:path/path.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 
+import '../../utils/constants/colors.dart';
+import '../../utils/models/navbar_model.dart';
 import '../../utils/controllers/profile_controller.dart';
 import '../../utils/models/user_model.dart';
-import '../../utils/repo/authentication_repository.dart';
 import '../../utils/widgets/reusable_widgets.dart';
-import '../initial/welcome.dart';
-import 'allUsers.dart';
+import '../settings.dart';
 import 'editProfile.dart';
 
 class ProfileScreen extends StatefulWidget {
+  static String routeName = "/profile";
   const ProfileScreen({super.key});
-
-  static String id = 'home';
 
   @override
   State<ProfileScreen> createState() => _ProfileScreenState();
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
+  File? image;
+  String imageUrl = ' ';
+  var imageLink;
+
+  Future pickImage(ImageSource source) async {
+    try {
+      final image = await ImagePicker().pickImage(source: source);
+
+      //final imageTemp = File(image.path);
+      final imagePath = await saveImagePermanently(image!.path);
+      setState(() => this.image = imagePath);
+    } on PlatformException catch (e) {
+      print('Failed to pick image: $e');
+    }
+  }
+
+  Future<File> saveImagePermanently(String imagePath) async {
+    final directory = await getApplicationDocumentsDirectory();
+    final name = basename(imagePath);
+    final image = File('${directory.path}/$name');
+
+    Reference ref = FirebaseStorage.instance.ref().child('profilepic.jpg');
+    await ref.putFile(File(image.path));
+    ref.getDownloadURL().then((value) {
+      print(value);
+      setState(() {
+        imageUrl = value;
+        imageLink = PfPDB(imageUrl: value);
+        storeImageUrl(imageLink);
+      });
+    });
+
+    return File(imagePath).copy(image.path);
+  }
+
   @override
   Widget build(BuildContext context) {
     var isDark = MediaQuery.of(context).platformBrightness == Brightness.light;
@@ -31,6 +76,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         automaticallyImplyLeading: false,
         backgroundColor: const Color(0xFFC0FFE8),
         centerTitle: true,
+        toolbarHeight: 45,
         title: const Text(
           'PROFILE',
           style: TextStyle(
@@ -41,13 +87,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
         ),
         actions: [
           IconButton(
-            onPressed: () {},
-            icon: Icon(isDark ? LineAwesomeIcons.sun : LineAwesomeIcons.moon),
+            onPressed: () {
+              Get.to(
+                () => const SettingsScreen(),
+                transition: Transition.rightToLeft,
+                duration: const Duration(milliseconds: 500),
+              );
+            },
+            icon: SvgPicture.asset(
+              "assets/icons/Settings.svg",
+              color: primaryColor,
+            ),
             color: Colors.black,
           )
         ],
       ),
-
       body: SingleChildScrollView(
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 25.0),
@@ -64,32 +118,32 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       // Profile Photo
                       Stack(
                         children: [
-                          Container(
-                            height: 120,
-                            width: 120,
-                            decoration: BoxDecoration(
-                              border: Border.all(
-                                  width: 2, color: const Color(0xFF000014)),
-                              borderRadius: BorderRadius.circular(100),
-                            ),
-                            child: const Image(
-                                image: AssetImage('assets/images/profile.png'),
-                                fit: BoxFit.cover),
+                          CircleAvatar(
+                            backgroundImage: imageUrl == ' '
+                                ? const AssetImage('assets/images/Huddle.png')
+                                : NetworkImage(imageUrl) as ImageProvider,
+                            radius:
+                                MediaQuery.of(context).size.aspectRatio * 100,
+                            foregroundColor: primaryColor,
                           ),
                           Positioned(
-                            bottom: 0,
+                            top: 30,
                             right: 0,
                             child: Container(
-                              width: 35,
-                              height: 35,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(100),
-                                color: const Color(0xFF000014),
+                              width: MediaQuery.of(context).size.width * 0.1,
+                              height: MediaQuery.of(context).size.height * 0.2,
+                              decoration: const BoxDecoration(
+                                color: Color(0xFF000014),
+                                shape: BoxShape.circle,
                               ),
-                              child: const Icon(
+                              child: IconButton(
+                                icon: const Icon(
                                   LineAwesomeIcons.alternate_pencil,
                                   size: 20,
-                                  color: Colors.white),
+                                ),
+                                color: Colors.white,
+                                onPressed: () => myPfPDialog(context),
+                              ),
                             ),
                           )
                         ],
@@ -101,78 +155,31 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       Text(
                         '${userData.fullName}',
                         style: const TextStyle(
-                          fontSize: 26,
+                          fontSize: 24,
                           fontWeight: FontWeight.bold,
-                          fontFamily: 'Aware',
                         ),
                       ),
                       Text(
                         userData.email,
                         style: const TextStyle(
-                          fontSize: 16,
+                          fontSize: 15,
                           fontFamily: 'Aware',
                         ),
                       ),
 
                       const SizedBox(height: 20),
 
-                      myButton(context, 'Edit Profile',
-                          () => Get.to(() => const UpdateProfileScreen())),
+                      // Edit Profile Button
+                      SizedBox(
+                        height: MediaQuery.of(context).size.height * 0.1,
+                        width: MediaQuery.of(context).size.width * 0.4,
+                        child: myButton(context, 'Edit Profile',
+                            () => Get.to(() => const UpdateProfileScreen())),
+                      ),
 
                       const SizedBox(height: 25),
                       const Divider(color: Colors.grey),
                       const SizedBox(height: 10),
-
-                      // MENU
-                      ProfileMenuWidget(
-                          title: 'Settings',
-                          icon: LineAwesomeIcons.cog,
-                          onPress: () {}),
-                      ProfileMenuWidget(
-                          title: 'Billing Details',
-                          icon: LineAwesomeIcons.wallet,
-                          onPress: () {}),
-                      ProfileMenuWidget(
-                          title: 'User Management',
-                          icon: LineAwesomeIcons.user_check,
-                          onPress: () {
-                            Get.snackbar(
-                              "Error",
-                              "You don't have access to this.",
-                              snackPosition: SnackPosition.BOTTOM,
-                              backgroundColor:
-                                  Colors.redAccent.withOpacity(0.1),
-                              colorText: Colors.red,
-                            );
-                          }),
-
-                      const SizedBox(height: 10),
-                      const Divider(color: Colors.grey),
-                      const SizedBox(height: 10),
-
-                      ProfileMenuWidget(
-                          title: 'Information',
-                          icon: LineAwesomeIcons.info,
-                          onPress: () {}),
-                      ProfileMenuWidget(
-                          title: 'Logout',
-                          icon: LineAwesomeIcons.alternate_sign_out,
-                          textColor: Colors.red,
-                          endIcon: false,
-                          onPress: () {
-                            AuthenticationRepository.instance
-                                .logout()
-                                .then((value) {
-                              print("Logged Out");
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          const WelcomeScreen()));
-                            }).onError((error, stackTrace) {
-                              print("Error ${error.toString()}");
-                            });
-                          }),
                     ],
                   );
                 } else if (snapshot.hasError) {
@@ -189,95 +196,71 @@ class _ProfileScreenState extends State<ProfileScreen> {
           ),
         ),
       ),
-
-      // bottomNavigationBar: CurvedNavigationBar(
-      //   index: 3,
-      //   height: 60,
-      //   backgroundColor: Colors.transparent,
-      //   color: const Color.fromARGB(255, 221, 255, 242),
-      //   animationDuration: const Duration(milliseconds: 350),
-      //   items: const <Widget>[
-      //     Icon(
-      //       Icons.home,
-      //       color: Colors.black,
-      //     ),
-      //     Icon(
-      //       Icons.wifi_tethering,
-      //       // icon: const Icon(Icons.wifi_tethering),
-      //       color: Colors.black,
-      //       // onPressed: () {
-      //       //   Navigator.push(context,
-      //       //       MaterialPageRoute(builder: (context) => const SearchScreen()));
-      //       // }
-      //     ),
-      //     Icon(
-      //       Icons.favorite_border,
-      //       // icon: const Icon(Icons.favorite_border),
-      //       color: Colors.black,
-      //       // onPressed: () {
-      //       //   Navigator.push(context,
-      //       //       MaterialPageRoute(builder: (context) => const HobbiesScreen()));
-      //       // }
-      //     ),
-      //     Icon(
-      //       Icons.settings,
-      //       // icon: const Icon(Icons.settings),
-      //       color: Colors.black,
-      //       // onPressed: () {
-      //       //   Navigator.push(context,
-      //       //       MaterialPageRoute(builder: (context) => const ProfileScreen()));
-      //       // }
-      //     ),
-      //   ],
-      // ),
+      bottomNavigationBar: myNavBar(MenuState.profile),
     );
   }
-}
 
-class ProfileMenuWidget extends StatelessWidget {
-  const ProfileMenuWidget({
-    Key? key,
-    required this.title,
-    required this.icon,
-    required this.onPress,
-    this.endIcon = true,
-    this.textColor,
-  }) : super(key: key);
-
-  final String title;
-  final IconData icon;
-  final VoidCallback onPress;
-  final bool endIcon;
-  final Color? textColor;
-
-  @override
-  Widget build(BuildContext context) {
-    return ListTile(
-      onTap: onPress,
-      leading: Container(
-        width: 40,
-        height: 40,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(100),
-          color: Colors.blueAccent.withOpacity(0.1),
+  
+// Image Selection
+  Future myPfPDialog(context) {
+    return showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text(
+          'Select Image Source',
+          textAlign: TextAlign.center,
         ),
-        child: Icon(icon, color: Colors.blueAccent),
+        titlePadding: const EdgeInsets.all(15),
+        actions: [
+          // Camera Option
+          TextButton(
+            onPressed: () =>
+                Navigator.pop(context, pickImage(ImageSource.camera)),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: const [
+                Icon(
+                  LineAwesomeIcons.camera,
+                  color: primaryColor,
+                  size: 30,
+                ),
+                SizedBox(width: 10),
+                Text(
+                  'Camera',
+                  style: TextStyle(
+                    color: primaryColor,
+                    fontSize: 18,
+                  ),
+                ),
+              ],
+            ),
+          ),
+
+          // Gallery Option
+          TextButton(
+            onPressed: () =>
+                Navigator.pop(context, pickImage(ImageSource.gallery)),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: const [
+                Icon(
+                  LineAwesomeIcons.image,
+                  color: primaryColor,
+                  size: 30,
+                ),
+                SizedBox(width: 10),
+                Text(
+                  'Gallery',
+                  style: TextStyle(
+                    color: primaryColor,
+                    fontSize: 18,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
-      title: Text(title,
-          style:
-              Theme.of(context).textTheme.bodyLarge?.apply(color: textColor)),
-      trailing: endIcon
-          ? Container(
-              width: 30,
-              height: 30,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(100),
-                color: Theme.of(context).backgroundColor.withOpacity(0.1),
-              ),
-              child: const Icon(LineAwesomeIcons.angle_right,
-                  size: 18, color: Colors.grey),
-            )
-          : null,
     );
   }
 }

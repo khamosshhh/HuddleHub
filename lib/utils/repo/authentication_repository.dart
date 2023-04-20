@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../screens/base.dart';
+import '../../screens/home.dart';
 import '../../screens/initial/splash.dart';
 import '../../screens/initial/welcome.dart';
 import '../constants/login_failure_exception.dart';
@@ -29,7 +29,7 @@ class AuthenticationRepository extends GetxController {
   _setInitialScreen(User? user) {
     user == null
         ? Get.offAll(() => SplashScreen())
-        : Get.offAll(() => const BaseScreen());
+        : Get.offAll(() => const HomeScreen());
   }
 
   // Account Creation
@@ -46,7 +46,7 @@ class AuthenticationRepository extends GetxController {
       await _auth.createUserWithEmailAndPassword(
           email: email, password: password);
       firebaseUser.value != null
-          ? Get.offAll(() => const BaseScreen())
+          ? Get.offAll(() => const HomeScreen())
           : Get.offAll(() => const WelcomeScreen());
     } on FirebaseAuthException catch (e) {
       final ex = LoginFailureException.code(e.code);
@@ -72,7 +72,7 @@ class AuthenticationRepository extends GetxController {
     try {
       await _auth.signInWithEmailAndPassword(email: email, password: password);
       firebaseUser.value != null
-          ? Get.offAll(() => const BaseScreen())
+          ? Get.offAll(() => const HomeScreen())
           : Get.offAll(() => const WelcomeScreen());
     } on FirebaseAuthException catch (e) {
       final ex = LoginFailureException.code(e.code);

@@ -9,6 +9,7 @@ import '../../utils/widgets/signup_footer.dart';
 import '../../utils/widgets/signup_form.dart';
 
 class SignUpScreen extends StatelessWidget {
+  static String routeName = "/sign_up";
   const SignUpScreen({Key? key}) : super(key: key);
 
   @override

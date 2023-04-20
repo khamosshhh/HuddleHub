@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 
-import '../../screens/base.dart';
+import '../../screens/home.dart';
 import '../../screens/initial/onboarding.dart';
 
 class SplashScreenController extends GetxController {
@@ -17,7 +17,7 @@ class SplashScreenController extends GetxController {
     if (FirebaseAuth.instance.currentUser == null) {
       Get.to(() => const OnboardingScreen());
     } else {
-      Get.to(() => const BaseScreen());
+      Get.to(() => const HomeScreen());
     }
   }
 }

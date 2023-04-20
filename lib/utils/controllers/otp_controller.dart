@@ -1,6 +1,6 @@
 import 'package:get/get.dart';
 
-import '../../screens/base.dart';
+import '../../screens/home.dart';
 import '../repo/authentication_repository.dart';
 
 class OTPController extends GetxController {
@@ -8,6 +8,6 @@ class OTPController extends GetxController {
 
   void verifyOTP(String otp) async {
     var isVerified = await AuthenticationRepository.instance.verifyOTP(otp);
-    isVerified != null ? Get.offAll(const BaseScreen()) : Get.back();
+    isVerified != null ? Get.offAll(const HomeScreen()) : Get.back();
   }
 }

@@ -7,3 +7,11 @@ class Marker {
     required this.longitude,
   });
 }
+
+class Range {
+  final int range;
+
+  Range({
+    required this.range,
+  });
+}

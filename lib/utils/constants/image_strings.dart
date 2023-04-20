@@ -5,9 +5,9 @@ const String splashIcon = "assets/images/profile.png";
 const String splashImage = "assets/images/message.png";
 
 // -- Onboarding Screen Images
-const String onboardingImage1 = "assets/images/logo.png";
-const String onboardingImage2 = "assets/images/logo.png";
-const String onboardingImage3 = "assets/images/logo.png";
+const String onboardingImage1 = "assets/images/init1.png";
+const String onboardingImage2 = "assets/images/init2.png";
+const String onboardingImage3 = "assets/images/init3.png";
 
 // -- Welcome Screen Images
 const String welcomeImage = "assets/images/logo.png";

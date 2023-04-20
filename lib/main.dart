@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
-import 'radar.dart';
 import 'utils/constants/colors.dart';
 import 'utils/constants/theme.dart';
 import 'utils/repo/authentication_repository.dart';
@@ -34,8 +33,8 @@ class _MyAppState extends State<MyApp> {
       themeMode: ThemeMode.light,
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
-      defaultTransition: Transition.leftToRightWithFade,
-      transitionDuration: const Duration(milliseconds: 500),
+      // defaultTransition: Transition.leftToRightWithFade,
+      // transitionDuration: const Duration(milliseconds: 500),
 
       // /// check if user is signed (Open Home Page) if user is not signed in (Open Onboarding Page)
       // initialRoute: FirebaseAuth.instance.currentUser == null

@@ -1,9 +1,16 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
 
+import '../utils/constants/colors.dart';
+import '../utils/models/navbar_model.dart';
 import '../utils/widgets/reusable_widgets.dart';
+import 'chat.dart';
+import 'temp/home/home_screen.dart';
 
 class HomeScreen extends StatefulWidget {
+  static String routeName = "/home";
   const HomeScreen({super.key});
 
   @override
@@ -15,7 +22,37 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       // drawer: mySideBar(context),
-      appBar: myAppBar(),
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        backgroundColor: const Color(0xFFC0FFE8),
+        centerTitle: true,
+        toolbarHeight: 45,
+        title: const Text(
+          'HUDDLE HUB',
+          style: TextStyle(
+            color: Colors.black,
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+            fontFamily: 'Aware',
+          ),
+        ),
+        actions: [
+          IconButton(
+            onPressed: () {
+              Get.to(
+                () => const ChatScreen(),
+                transition: Transition.rightToLeft,
+                duration: const Duration(milliseconds: 500),
+              );
+            },
+            icon: SvgPicture.asset(
+              "assets/icons/Chat bubble Icon.svg",
+              color: primaryColor,
+            ),
+            color: Colors.black,
+          )
+        ],
+      ),
 
       body: Center(
         child: Container(
@@ -40,22 +77,17 @@ class _HomeScreenState extends State<HomeScreen> {
                 const SizedBox(
                   height: 20,
                 ),
-                // ElevatedButton(
-                //   child: const Text("Logout"),
-                //   onPressed: () async {
-                //     await FirebaseAuth.instance.signOut();
-                //     Navigator.push(
-                //         context,
-                //         MaterialPageRoute(
-                //             builder: (context) => const WelcomeScreen()));
-                //   },
-                // ),
+                ElevatedButton(
+                  child: const Text("Let's go!"),
+                  onPressed: () => Get.to(() => const HOMEScreen()),
+                ),
               ],
             ),
           )),
         ),
       ),
 
+      bottomNavigationBar: myNavBar(MenuState.home),
       // bottomNavigationBar: CurvedNavigationBar(
       //   index: 1,
       //   height: 60,
